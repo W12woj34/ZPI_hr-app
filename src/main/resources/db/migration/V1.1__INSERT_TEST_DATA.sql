@@ -204,26 +204,26 @@ VALUES (6, 6),
        (26, 26),
        (27, 27);
 
-INSERT INTO Applicant (id)
-VALUES (16),
-       (17),
-       (18),
-       (19),
-       (20),
-       (21),
-       (22);
+INSERT INTO Applicant (id, position, initial_assessment, scheduled_meeting)
+VALUES (16, 'Junior Java Developer', 3, '2020-06-26T12:00:00'),
+       (17, 'Junior C++ Developer', 3, '2020-08-21T09:45:00'),
+       (18, 'Junior Python Developer', 1, '2020-07-21T08:30:00'),
+       (19, 'Junior Web Developer', 5, '2021-07-05T08:30:00'),
+       (20, 'Java Developer', 4, '2020-06-30T08:30:00'),
+       (21, 'Java Developer', 2, '2020-07-15T15:00:00'),
+       (22, 'Project Manager', 1, '2020-06-13T13:00:00');
 
-INSERT INTO Working_Employee (id)
-VALUES (6),
-       (7),
-       (8),
-       (9),
-       (10),
-       (11),
-       (12),
-       (13),
-       (14),
-       (15);
+INSERT INTO Working_Employee (id, position)
+VALUES (6, 'Tester'),
+       (7, 'Junior Java Developer'),
+       (8, 'Junior Web Developer'),
+       (9, 'Senior Java Developer'),
+       (10, 'C++ Developer'),
+       (11, 'Junior Python Developer'),
+       (12, 'Project Manager'),
+       (13, 'Scrum Master'),
+       (14, 'Senior Java Developer'),
+       (15, 'Senior Code Architect');
 
 INSERT INTO Terminated_Employee (id, availability, next_date_contact)
 VALUES (23, 'no', '2020-10-03'),

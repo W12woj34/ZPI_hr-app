@@ -13,8 +13,10 @@ import pwr.zpi.hrapp.persistance.entities.EmployeeEntity;
   @Join(path = "contact", alias = "contact"),
 })
 @And({
-  @Spec(path = "contact.email", params = "contactEmail", spec = Like.class),
-  @Spec(path = "contact.mobile", params = "contactMobile", spec = Like.class),
+  @Spec(path = "contact.email", params = "email", spec = Like.class),
+  @Spec(path = "contact.mobile", params = "mobile", spec = Like.class),
+  @Spec(path = "contact.git", params = "git", spec = Like.class),
+  @Spec(path = "contact.linkedin", params = "linkedin", spec = Like.class),
   @Spec(path = "firstName", params = "firstName", spec = Like.class),
   @Spec(path = "lastName", params = "lastName", spec = Like.class),
   @Spec(

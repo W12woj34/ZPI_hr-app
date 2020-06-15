@@ -1,5 +1,7 @@
 package pwr.zpi.hrapp.service.implementations;
 
+import static pwr.zpi.hrapp.security.SecurityConstants.LOGIN_PREFIX;
+import static pwr.zpi.hrapp.security.SecurityConstants.PERSON_PREFIX;
 import static pwr.zpi.hrapp.security.SecurityConstants.ROLE_ADMIN;
 import static pwr.zpi.hrapp.security.SecurityConstants.ROLE_EMPLOYEE;
 import static pwr.zpi.hrapp.security.SecurityConstants.ROLE_HR;
@@ -54,18 +56,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     boolean isEmployee =
         employeeRepository.findById(Objects.requireNonNull(user.getId())).isPresent();
 
-    Collection<SimpleGrantedAuthority> roles = new LinkedList<>();
+    Collection<SimpleGrantedAuthority> authorities = new LinkedList<>();
+
+    authorities.add(new SimpleGrantedAuthority(LOGIN_PREFIX + user.getId().toString()));
 
     if (isEmployee) {
-      roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + ROLE_EMPLOYEE));
+      authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + ROLE_EMPLOYEE));
+      authorities.add(
+          new SimpleGrantedAuthority(
+              (PERSON_PREFIX + employeeRepository.findByLogin_id(user.getId()).getId())));
     }
     if (isHRWorker) {
-      roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + ROLE_HR));
+      authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + ROLE_HR));
+      authorities.add(
+          new SimpleGrantedAuthority(
+              (PERSON_PREFIX + hrWorkerRepository.findByLogin_id(user.getId()).getId())));
     }
     if (isAdmin) {
-      roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + ROLE_ADMIN));
+      authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + ROLE_ADMIN));
+      authorities.add(
+          new SimpleGrantedAuthority(
+              (PERSON_PREFIX + adminRepository.findByLogin_id(user.getId()).getId())));
     }
 
-    return new User(user.getEmail(), user.getPassword(), roles);
+    return new User(user.getEmail(), user.getPassword(), authorities);
   }
 }

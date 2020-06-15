@@ -1,6 +1,7 @@
 package pwr.zpi.hrapp.persistance.entities;
 
 import java.util.Collection;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -20,18 +21,18 @@ public class EmployeeEntity extends PersonEntity {
   @JoinColumn(name = "login_id")
   private LoginEntity login;
 
-  @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY)
+  @OneToOne(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
   private ContactEntity contact;
 
-  @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
   private Collection<EducationEntity> education;
 
-  @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
   private Collection<ExperienceEntity> experience;
 
-  @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
   private Collection<LanguageKnowledgeEntity> languagesKnowledge;
 
-  @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
   private Collection<SkillLevelEntity> skillLevels;
 }

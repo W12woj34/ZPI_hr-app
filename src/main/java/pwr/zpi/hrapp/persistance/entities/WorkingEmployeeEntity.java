@@ -2,6 +2,7 @@ package pwr.zpi.hrapp.persistance.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,4 +10,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "Working_Employee")
 @Data
 @NoArgsConstructor
-public class WorkingEmployeeEntity extends EmployeeEntity {}
+@AllArgsConstructor
+public class WorkingEmployeeEntity extends EmployeeEntity {
+  private String position;
+}

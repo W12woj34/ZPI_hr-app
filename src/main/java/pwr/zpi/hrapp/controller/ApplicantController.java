@@ -12,10 +12,8 @@ import pwr.zpi.hrapp.specifications.ApplicantSpecification;
 public class ApplicantController
     extends BaseSpecificationCrudController<
         Applicant, Integer, ApplicantEntity, ApplicantSpecification> {
-  ApplicantService service;
 
   public ApplicantController(ApplicantService service) {
     super(service);
-    this.service = service;
   }
 }

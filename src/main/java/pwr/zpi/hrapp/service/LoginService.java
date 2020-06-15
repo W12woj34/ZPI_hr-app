@@ -7,4 +7,6 @@ public interface LoginService extends CrudService<Login, Integer> {
   Integer register(String email, String password);
 
   String refresh(String refreshToken);
+
+  Integer changePassword(Integer userId, String oldPassword, String newPassword);
 }

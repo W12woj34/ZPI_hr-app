@@ -44,7 +44,8 @@ public class EmployeeWithRequiredSkillLevelsSpecification<T extends EmployeeEnti
         .groupBy(skillLevelJoin.get(SkillLevelEntity_.employee))
         .having(
             cb.equal(
-                cb.count(skillLevelJoin.get(SkillLevelEntity_.employee)), searchSkillLevels.size()))
+                cb.countDistinct(skillLevelJoin.get(SkillLevelEntity_.skill).get(SkillEntity_.id)),
+                searchSkillLevels.size()))
         .getRestriction();
   }
 }

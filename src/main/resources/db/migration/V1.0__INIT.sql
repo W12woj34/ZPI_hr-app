@@ -46,6 +46,7 @@ CREATE TABLE Terminated_Employee
 CREATE TABLE Working_Employee
 (
     id int NOT NULL,
+    position varchar(255),
     PRIMARY KEY (id),
     CONSTRAINT FKWorkingEmp371545 FOREIGN KEY (id) REFERENCES Employee (id)
 );

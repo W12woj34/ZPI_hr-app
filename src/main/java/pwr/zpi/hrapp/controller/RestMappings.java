@@ -3,7 +3,6 @@ package pwr.zpi.hrapp.controller;
 /** Klasa zawierająca stałe ze ścieżkami API */
 public final class RestMappings {
 
-  public static final String API = "/api";
   public static final String ID = "/{id}";
   public static final String SEARCH = "/search";
   public static final String SIGN_UP = "/sign-up";
@@ -26,6 +25,10 @@ public final class RestMappings {
   public static final String WORKING_EMPLOYEE = "/working-employees";
   public static final String ADMIN = "/admins";
   public static final String CV_FILES = "/cv-files";
+  public static final String REFRESH_TOKEN = "/refresh";
+  public static final String CHANGE_PASSWORD = "/change-password";
+
+  public static final String TERMINATE = ID + "/terminate";
 
   private RestMappings() {}
 }

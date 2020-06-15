@@ -15,6 +15,5 @@ public class TerminatedEmployeeController
 
   public TerminatedEmployeeController(TerminatedEmployeeService service) {
     super(service);
-    this.service = service;
   }
 }

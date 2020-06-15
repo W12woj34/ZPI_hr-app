@@ -5,8 +5,10 @@ import static pwr.zpi.hrapp.security.SecurityConstants.SECRET_AUTH;
 import static pwr.zpi.hrapp.security.SecurityConstants.TOKEN_PREFIX;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,7 +44,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     UsernamePasswordAuthenticationToken authentication;
     try {
       authentication = getAuthentication(request);
-    } catch (Exception e) {
+    } catch (SignatureException | ExpiredJwtException e) {
       response.setStatus(401);
       return;
     }

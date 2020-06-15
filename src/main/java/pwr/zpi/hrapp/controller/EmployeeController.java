@@ -20,8 +20,8 @@ import pwr.zpi.hrapp.specifications.EmployeeWithRequiredSkillLevelsSpecification
 @RestController
 public abstract class EmployeeController<
         T extends Employee, E extends EmployeeEntity, S extends Specification<E>>
-    extends BaseRestController<T, Integer> {
-  SpecificationCrudService<T, E, Integer> service;
+    extends BaseSpecificationCrudController<T, Integer, E, S> {
+  private final SpecificationCrudService<T, E, Integer> service;
 
   public EmployeeController(SpecificationCrudService<T, E, Integer> service) {
     super(service);
@@ -38,19 +38,15 @@ public abstract class EmployeeController<
     Specification<E> requiredLanguageKnowledgesSpecification = Specification.where(null);
 
     if (employeeSearchLists != null) {
-      if (employeeSearchLists.getSearchSkillLevels() != null
-          && employeeSearchLists.getSearchSkillLevels().getList() != null
-          && !employeeSearchLists.getSearchSkillLevels().getList().isEmpty()) {
+      if (!employeeSearchLists.getSearchSkillLevels().isEmpty()) {
         requiredSkillLevelsSpecification =
             new EmployeeWithRequiredSkillLevelsSpecification<>(
-                employeeSearchLists.getSearchSkillLevels().getList());
+                employeeSearchLists.getSearchSkillLevels());
       }
-      if (employeeSearchLists.getSearchLanguageKnowledges() != null
-          && employeeSearchLists.getSearchLanguageKnowledges().getList() != null
-          && !employeeSearchLists.getSearchLanguageKnowledges().getList().isEmpty()) {
+      if (!employeeSearchLists.getSearchLanguageKnowledges().isEmpty()) {
         requiredLanguageKnowledgesSpecification =
             new EmployeeWithRequiredLanguageKnowledgeSpecification<>(
-                employeeSearchLists.getSearchLanguageKnowledges().getList());
+                employeeSearchLists.getSearchLanguageKnowledges());
       }
     }
 

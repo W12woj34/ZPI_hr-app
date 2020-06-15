@@ -3,7 +3,13 @@ package pwr.zpi.hrapp.security;
 import static pwr.zpi.hrapp.security.SecurityConstants.EXPIRATION_TIME;
 import static pwr.zpi.hrapp.security.SecurityConstants.EXPIRATION_TIME_REFRESH;
 import static pwr.zpi.hrapp.security.SecurityConstants.HEADER_STRING_AUTH;
+import static pwr.zpi.hrapp.security.SecurityConstants.HEADER_STRING_ID;
+import static pwr.zpi.hrapp.security.SecurityConstants.HEADER_STRING_PERSON;
 import static pwr.zpi.hrapp.security.SecurityConstants.HEADER_STRING_REFRESH;
+import static pwr.zpi.hrapp.security.SecurityConstants.HEADER_STRING_TYPE;
+import static pwr.zpi.hrapp.security.SecurityConstants.LOGIN_PREFIX;
+import static pwr.zpi.hrapp.security.SecurityConstants.PERSON_PREFIX;
+import static pwr.zpi.hrapp.security.SecurityConstants.ROLE_PREFIX;
 import static pwr.zpi.hrapp.security.SecurityConstants.SECRET_AUTH;
 import static pwr.zpi.hrapp.security.SecurityConstants.SECRET_REFRESH;
 import static pwr.zpi.hrapp.security.SecurityConstants.TOKEN_PREFIX;
@@ -14,6 +20,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
@@ -55,15 +62,36 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       FilterChain chain,
       Authentication auth) {
 
+    Optional<String> loginId =
+        auth.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .filter(a -> a.startsWith(LOGIN_PREFIX))
+            .map(s -> s.replace(LOGIN_PREFIX, ""))
+            .findAny();
+
+    Optional<String> personId =
+        auth.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .filter(a -> a.startsWith(PERSON_PREFIX))
+            .map(s -> s.replace(PERSON_PREFIX, ""))
+            .findAny();
+
+    if (loginId.isEmpty() || personId.isEmpty()) {
+      response.setStatus(403);
+      return;
+    }
+
+    String roles =
+        auth.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .filter(a -> a.startsWith(ROLE_PREFIX))
+            .collect(Collectors.joining(";"));
+
     long currentTimeMillis = System.currentTimeMillis();
     String tokenAuth =
         Jwts.builder()
             .setSubject(((User) auth.getPrincipal()).getUsername())
-            .claim(
-                "roles",
-                auth.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.joining(";")))
+            .claim("roles", roles)
             .setIssuedAt(new Date(currentTimeMillis))
             .setExpiration(new Date(currentTimeMillis + EXPIRATION_TIME))
             .signWith(SignatureAlgorithm.HS512, SECRET_AUTH.getBytes())
@@ -72,11 +100,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     String tokenRefresh =
         Jwts.builder()
             .setSubject(((User) auth.getPrincipal()).getUsername())
-            .claim(
-                "roles",
-                auth.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.joining(";")))
+            .claim("roles", roles)
             .setIssuedAt(new Date(currentTimeMillis))
             .setExpiration(new Date(currentTimeMillis + EXPIRATION_TIME_REFRESH))
             .signWith(SignatureAlgorithm.HS512, SECRET_REFRESH.getBytes())
@@ -84,5 +108,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     response.addHeader(HEADER_STRING_AUTH, TOKEN_PREFIX + tokenAuth);
     response.addHeader(HEADER_STRING_REFRESH, tokenRefresh);
+    response.addHeader(HEADER_STRING_ID, loginId.get());
+    response.addHeader(HEADER_STRING_PERSON, personId.get());
+    response.addHeader(HEADER_STRING_TYPE, roles.replace(ROLE_PREFIX, ""));
   }
 }

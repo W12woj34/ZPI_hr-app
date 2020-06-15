@@ -49,7 +49,10 @@ public class EmployeeWithRequiredLanguageKnowledgeSpecification<T extends Employ
         .groupBy(languageKnowledgeJoin.get(LanguageKnowledgeEntity_.employee))
         .having(
             cb.equal(
-                cb.count(languageKnowledgeJoin.get(LanguageKnowledgeEntity_.employee)),
+                cb.countDistinct(
+                    languageKnowledgeJoin
+                        .get(LanguageKnowledgeEntity_.language)
+                        .get(LanguageEntity_.id)),
                 searchLanguageKnowledges.size()))
         .getRestriction();
   }

@@ -7,4 +7,7 @@ import pwr.zpi.hrapp.persistance.entities.HrWorkerEntity;
 
 @Repository
 public interface HrWorkerRepository
-    extends JpaRepository<HrWorkerEntity, Integer>, JpaSpecificationExecutor<HrWorkerEntity> {}
+    extends JpaRepository<HrWorkerEntity, Integer>, JpaSpecificationExecutor<HrWorkerEntity> {
+
+  HrWorkerEntity findByLogin_id(int login_id);
+}
